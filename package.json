@@ -1,0 +1,19 @@
+{
+  "name": "taki-tiler-server",
+  "version": "1.0.0",
+  "description": "Nome do Projeto: Taki_Tiler (Server)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "graphql": "^16.8.1",
+    "graphql-http": "^1.22.0",
+    "ruru": "^2.0.0-beta.11"
+  }
+}
