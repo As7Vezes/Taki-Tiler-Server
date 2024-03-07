@@ -1,21 +1,21 @@
-var express = require("express")
-var { createHandler } = require("graphql-http/lib/use/express")
-var { ruruHTML } = require("ruru/server")
-var { buildSchema } = require("graphql")
+const express = require("express")
+const { createHandler } = require("graphql-http/lib/use/express")
+const { ruruHTML } = require("ruru/server")
+const { buildSchema } = require("graphql")
 
-var schema = buildSchema(`
+const schema = buildSchema(`
     type Query {
         hello: String
     }
 `)
 
-var root = {
+const root = {
     hello: () => {
         return "Hello World!"
     }
 }
 
-var app = express()
+const app = express()
 
 app.all(
     "/graphql",
