@@ -1,4 +1,6 @@
 import { ApolloServer, gql } from "apollo-server";
+import "reflect-metadata"
+import { connectDatabase } from "./db/data-source";
 
 const typeDefs = gql`
     type Query {
@@ -19,6 +21,16 @@ export const server = new ApolloServer({
 
 const port = 3000
 
-server.listen({port}).then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`)
-})
+async function startSever () {
+    try {
+        const connection = await connectDatabase()
+        if(connection) {
+            const { url } = await server.listen({ port })
+            console.log(`🚀  Server ready at ${url}`);
+        } 
+    } catch (error) {
+        console.error(error)
+    }
+} 
+
+startSever()
