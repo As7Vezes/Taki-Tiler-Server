@@ -7,6 +7,7 @@
         "rootDir": ".",
         "outDir": "dist",
         "sourceMap": true,
+        "strictNullChecks": true,
         "esModuleInterop": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true

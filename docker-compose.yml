@@ -6,9 +6,9 @@ services:
     volumes:
       - ./db/dumps:/app-db-dumps
     environment:
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=postgres"
-      - "POSTGRES_DB=postgres"
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
 
   testdb:
     image: postgres:15.1
@@ -17,6 +17,6 @@ services:
     volumes:
       - ./db/dumps:/app-db-dumps
     environment:
-      - "POSTGRES_USER=postgresTest"
-      - "POSTGRES_PASSWORD=senha123"
-      - "POSTGRES_DB=postgresTest"
+      - "POSTGRES_USER=${DB_USER_TEST}"
+      - "POSTGRES_PASSWORD=${DB_USER_PASSWORD}"
+      - "POSTGRES_DB=${DB_NAME_TEST}"
