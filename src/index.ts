@@ -1,19 +1,10 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
 import 'reflect-metadata';
+import typeDefs from './graphql/schemas';
+import resolvers from './graphql/resolvers/User';
 import { connectDatabase } from './db/data-source';
+
 import 'dotenv/config';
-
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => 'Hello World!',
-  },
-};
 
 export const server = new ApolloServer({
   typeDefs,
