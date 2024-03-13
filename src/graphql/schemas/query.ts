@@ -9,8 +9,7 @@ export const queryTypeDefs = gql`
   type User {
     id: String
     name: String,
-    email: String,
-    password: String,
+    email: String
     birthDate: String
   }
 
