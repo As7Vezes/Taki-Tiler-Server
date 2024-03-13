@@ -7,16 +7,16 @@ export const queryTypeDefs = gql`
   }
 
   type User {
-    id: String
-    name: String,
-    email: String
+    id: String!
+    name: String!
+    email: String!
     birthDate: String
   }
 
   input UserInput {
-    name: String,
-    email: String,
-    password: String,
+    name: String!
+    email: String!
+    password: String!
     birthDate: String
   }
 `;

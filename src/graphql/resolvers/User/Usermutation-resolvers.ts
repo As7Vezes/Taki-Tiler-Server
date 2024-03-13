@@ -27,9 +27,7 @@ const mutationResolversUser = {
         birthDate: data.birthDate,
       });
 
-      const userCreated = await repo.save(user);
-
-      return userCreated;
+      return repo.save(user);
     },
   },
 };

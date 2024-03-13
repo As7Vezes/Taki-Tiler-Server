@@ -6,8 +6,7 @@ const queryResolversUser = {
     hello: () => 'Hello World!',
     users: async () => {
       const repo = appDataSource.getRepository(User)
-      const users = await repo.find()
-      return users
+      return  repo.find()
     }
   },
 };
