@@ -1,4 +1,4 @@
-export const regexPassword = (password: string) => {
+export const validationPasswordRegex = (password: string) => {
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
 
     if(!regexPassword.test(password)){
@@ -10,7 +10,7 @@ export const regexPassword = (password: string) => {
     return true
 }
 
-export const regexEmail = (email: string) => {
+export const validationEmailRegex = (email: string) => {
     const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if(!regexEmail.test(email)){

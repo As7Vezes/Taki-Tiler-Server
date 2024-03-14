@@ -7,16 +7,23 @@ export class User {
     id: number; 
 
     @Column({
-        length: 100
+        length: 100,
+        nullable: false
     })
     name: string;
 
-    @Column()
+    @Column({
+      nullable: false
+    })
     email: string
 
-    @Column()
+    @Column({
+      nullable: false
+    })
     birthDate: string
 
-    @Column()
+    @Column({
+      nullable: false
+    })
     password: string
 }

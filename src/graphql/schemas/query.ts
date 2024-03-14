@@ -3,11 +3,11 @@ import { gql } from 'apollo-server';
 export const queryTypeDefs = gql`
   type Query {
     hello: String
-    users: [User]
+    users: [User!]
   }
 
   type User {
-    id: String
+    id: ID!
     name: String!
     email: String!
     birthDate: String!

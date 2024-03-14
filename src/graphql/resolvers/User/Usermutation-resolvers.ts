@@ -1,6 +1,6 @@
 import { User } from '../../../entities/User';
 import { appDataSource } from '../../../db/data-source';
-import { regexEmail, regexPassword } from '../../../utils/regex_utils';
+import { validationEmailRegex, validationPasswordRegex } from '../../../utils/regex_utils';
 import { hash } from 'bcrypt';
 
 interface UserInput {
@@ -15,8 +15,8 @@ const mutationResolversUser = {
     createUser: async (_: any, { data }: { data: UserInput }) => {
       const repo = appDataSource.getRepository(User);
 
-      regexPassword(data.password);
-      regexEmail(data.email);
+      validationPasswordRegex(data.password);
+      validationEmailRegex(data.email);
 
       const passwordHash = await hash(data.password, 10)
 
