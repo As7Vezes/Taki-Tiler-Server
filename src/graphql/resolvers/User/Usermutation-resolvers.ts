@@ -20,12 +20,11 @@ const mutationResolversUser = {
 
       const passwordHash = await hash(data.password, 10)
 
-      const user = repo.create({
-        name: data.name,
-        email: data.email,
-        password: passwordHash,
-        birthDate: data.birthDate,
-      });
+      const user = new User()
+      user.name = data.name
+      user.email = data.email
+      user.password = passwordHash
+      user.birthDate = data.birthDate
 
       return repo.save(user);
     },
