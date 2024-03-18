@@ -3,6 +3,7 @@ import axios from 'axios';
 import { after, before, describe, it } from 'mocha';
 import typeDefs from '../src/graphql/schemas';
 import resolvers from '../src/graphql/resolvers/User';
+import { expect } from 'chai';
 
 let server: any;
 
@@ -25,7 +26,7 @@ describe('Teste de comunicação com o servidor Apollo', () => {
       const response = await axios.post(serverUrl, {
         query: '{ hello }',
       });
-      console.log(response.data);
+      expect(response.data.data.hello).to.equal("Hello World!")
     } catch (error) {
       throw new Error(`Erro na solicitação: ${error}`);
     }
