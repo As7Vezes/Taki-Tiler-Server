@@ -4,8 +4,6 @@ import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers/User';
 import { connectDatabase } from './db/data-source';
 
-import 'dotenv/config';
-
 export const server = new ApolloServer({
   typeDefs,
   resolvers,

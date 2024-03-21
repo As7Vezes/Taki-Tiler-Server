@@ -3,7 +3,7 @@ import { appDataSource } from '../../../db/data-source';
 import { validationEmailRegex, validationPasswordRegex } from '../../../utils/regex_utils';
 import { hash } from 'bcrypt';
 
-interface UserInput {
+export interface UserInput {
   name: string;
   email: string;
   password: string;
@@ -14,6 +14,12 @@ const mutationResolversUser = {
   Mutation: {
     createUser: async (_: any, { data }: { data: UserInput }) => {
       const repo = appDataSource.getRepository(User);
+
+      const verifyUserExist = await repo.findOne({ where: { email: data.email } })
+
+      if (verifyUserExist) {
+        throw new Error("Error registering user ")
+      }
 
       validationPasswordRegex(data.password);
       validationEmailRegex(data.email);
