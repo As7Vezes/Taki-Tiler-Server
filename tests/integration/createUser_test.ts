@@ -1,82 +1,66 @@
-import { before, describe, it, after } from "mocha";
-import { expect } from "chai";
-import { ApolloServer } from "apollo-server";
-import typeDefs from "../../src/graphql/schemas";
-import resolvers from "../../src/graphql/resolvers/User";
-import axios from "axios";
-import { UserInput } from "../../src/graphql/resolvers/User/Usermutation-resolvers";
-import { User } from "../../src/entities/User";
-import { DataSource } from "typeorm";
-import { join } from "path";
+import 'reflect-metadata';
 import "dotenv/config"
+import { after, before, describe, it } from 'mocha';
+import { expect } from 'chai';
+import axios from 'axios';
+import { UserInput } from '../../src/graphql/resolvers/User/Usermutation-resolvers';
+import typeDefs from '../../src/graphql/schemas';
+import resolvers from '../../src/graphql/resolvers/User';
+import { ApolloServer } from 'apollo-server';
+import { appDataSourceTest } from '../../src/db/data-source';
+import { User } from '../../src/entities/User';
+import { compare, hash } from 'bcrypt';
+import createUserMutation from '../resolvers/mutations/createUserMutation';
 
 let server: ApolloServer
 
-describe("Testing connection with database and server", () => {
-    before("connect to database and start server", async () => {
+describe('Testing connection with database and server', () => {
+  before('connect to database and start server', async () => {
 
-      const appDataSourceTest = new DataSource({
-        type: 'postgres',
-        host: 'localhost',
-        port: Number(process.env.DB_PORT),
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        synchronize: true,
-        logging: true,
-        entities: [join(__dirname, '.././src/entities/*.ts')],
-      });
+    const port = 4001
 
-        await appDataSourceTest.initialize();
-        const user = appDataSourceTest.getRepository(User)
-        user.clear()
-        console.log("Database connected");
+    await appDataSourceTest.initialize()
 
-        expect(appDataSourceTest.isInitialized).to.be.true;
+    const userRepo = appDataSourceTest.getRepository(User)
+    userRepo.clear()
 
-        server = new ApolloServer({
-            typeDefs,
-            resolvers,
-        });
-        const { url } = await server.listen({ port: 4001 });
-        console.log(`🚀  Server is running on port ${url}`);
+    server = new ApolloServer({
+      typeDefs,
+      resolvers,
     });
 
-    it('It should return a user created - 200', async () => {
+    const { url } = await server.listen({ port });
+    console.log(`🚀  Server ready at ${url}`);
 
-        const userData: UserInput = {
-            name: 'Nome do Usuário',
-            email: 'email@exemplo.com',
-            password: 'senha123',
-            birthDate: '1990-01-01', 
-          };
+  });
 
-        const serverUrl = 'http://localhost:4001/';
+  it('It should return all the data of the user', async () => {
 
-        try {
-            const response = await axios.post(serverUrl, {
-                query: `
-                mutation ($data: UserInput) {
-                  createUser(data: $data) {
-                    id
-                    name
-                    email
-                    birthDate
-                  }
-                }
-              `,
-              variables: { data: userData },
-            });
-            console.log(response.data.data)
-            console.log(response.data.errors)
-            expect(response.status).to.equal(200)
-            /* expect(response.data.data).to.haveOwnProperty("createUser") */
-        } catch (error) {
-            throw new Error(`Request error: ${error}`);
-        }
+    const passwordHash = await hash('senha123', 10)
+
+    const userData: UserInput = {
+      name: 'usuarioTeste',
+      email: 'email@exemplo.com',
+      password: passwordHash,
+      birthDate: '1990-01-01',
+    };
+    const isPasswordCorrect = await compare('senha123', passwordHash);
+    const serverUrl = 'http://localhost:4001/';
+
+    const response = await axios.post(serverUrl, {
+      query: createUserMutation,
+      variables: { data: userData },
     });
+    console.log(response.data);
+    expect(response.status).to.equal(200);
+    expect(response.data.data.createUser).to.have.all.keys('id', 'name', 'email', 'birthDate');
+    expect(response.data.data.createUser.name).to.equal(userData.name)
+    expect(response.data.data.createUser.email).to.equal(userData.email)
+    expect(response.data.data.createUser.birthDate).to.equal(userData.birthDate)
+    expect(isPasswordCorrect).to.be.true;
+  });
 
-    after(async () => {
-        await server.stop();
-    });
+  after(async () => {
+    await server.stop()
+  })
 });

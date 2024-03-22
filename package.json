@@ -4,8 +4,8 @@
   "description": "Nome do Projeto: Taki_Tiler (Server)",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node-dev ./src/index.ts",
-    "test": "mocha -r ts-node/register 'tests/**/*.ts'"
+    "start": "cross-env NODE_ENV=development ts-node-dev ./src/index.ts",
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register 'tests/**/*.ts'"
   },
   "keywords": [],
   "author": "",

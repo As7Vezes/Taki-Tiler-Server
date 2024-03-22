@@ -1,7 +1,8 @@
 import { User } from '../../../entities/User';
 import { appDataSource } from '../../../db/data-source';
-import { validationEmailRegex, validationPasswordRegex } from '../../../utils/regex_utils';
+import { validationEmailRegex, validationPasswordRegex } from '../../../utils/regex_utils'; 
 import { hash } from 'bcrypt';
+import { appDataSourceTest } from '../../../db/data-source';
 
 export interface UserInput {
   name: string;
@@ -13,12 +14,19 @@ export interface UserInput {
 const mutationResolversUser = {
   Mutation: {
     createUser: async (_: any, { data }: { data: UserInput }) => {
-      const repo = appDataSource.getRepository(User);
+      
+      let repo;
+
+      if (process.env.NODE_ENV === "test") {
+        repo = appDataSourceTest.getRepository(User);
+      } else if (process.env.NODE_ENV === "development") {
+        repo = appDataSource.getRepository(User);
+      } 
 
       const verifyUserExist = await repo.findOne({ where: { email: data.email } })
 
       if (verifyUserExist) {
-        throw new Error("Error registering user ")
+        throw new Error("Error, User already exist")
       }
 
       validationPasswordRegex(data.password);
