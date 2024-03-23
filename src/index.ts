@@ -1,10 +1,8 @@
-import { ApolloServer } from 'apollo-server';
 import 'reflect-metadata';
+import { ApolloServer } from 'apollo-server';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers/User';
 import { connectDatabase } from './db/data-source';
-
-import 'dotenv/config';
 
 export const server = new ApolloServer({
   typeDefs,
@@ -13,8 +11,7 @@ export const server = new ApolloServer({
 
 const port = 3000;
 
-async function startSever() {
-
+export async function startSever() {
   try {
     const connection = await connectDatabase();
     if (connection) {
