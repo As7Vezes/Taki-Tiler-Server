@@ -1,8 +1,8 @@
 import { User } from '../../../entities/User';
-import { appDataSource } from '../../../db/data-source';
 import { validationEmailRegex, validationPasswordRegex } from '../../../utils/regex_utils'; 
 import { hash } from 'bcrypt';
-import { appDataSourceTest } from '../../../db/data-source';
+import { UserExistEmailError } from '../../../errors/UserEmailError';
+import { getRepositoryByEnvironment } from '../../../utils/repositoryUltis';
 
 export interface UserInput {
   name: string;
@@ -11,22 +11,22 @@ export interface UserInput {
   birthDate: string;
 }
 
+const repo = getRepositoryByEnvironment(process.env.NODE_ENV, User);
+
 const mutationResolversUser = {
   Mutation: {
     createUser: async (_: any, { data }: { data: UserInput }) => {
       
-      let repo;
-
-      if (process.env.NODE_ENV === "test") {
-        repo = appDataSourceTest.getRepository(User);
-      } else if (process.env.NODE_ENV === "development") {
-        repo = appDataSource.getRepository(User);
-      } 
+      if (repo) {
+        return repo.find();
+      } else {
+        console.error('Erro ao obter o repositório com base no ambiente.');
+      }
 
       const verifyUserExist = await repo.findOne({ where: { email: data.email } })
 
       if (verifyUserExist) {
-        throw new Error("Error, User already exist")
+        throw new UserExistEmailError()
       }
 
       validationPasswordRegex(data.password);
