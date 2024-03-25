@@ -15,6 +15,17 @@ const queryResolversUser = {
 
       return repo.find();
     },
+    findUser: async (_: any, { id }: { id: string }) => {
+      let repo: any;
+
+      if (process.env.NODE_ENV === 'test') {
+        repo = appDataSourceTest.getRepository(User);
+      } else if (process.env.NODE_ENV === 'development') {
+        repo = appDataSource.getRepository(User);
+      } 
+
+      return repo.findOne({ where: { id } });
+    }
   },
 };
 

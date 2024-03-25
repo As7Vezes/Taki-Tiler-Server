@@ -3,7 +3,7 @@ export const validationPasswordRegex = (password: string) => {
 
     if(!regexPassword.test(password)){
         throw new Error(
-            "A senha deve conter no mínimo uma letra e um número e deve ser igual ou maior que 6 caracteres"
+            "The password must contain at least one letter and one number, and it must be equal to or greater than 6 characters."
         );
     }
 
@@ -15,7 +15,7 @@ export const validationEmailRegex = (email: string) => {
 
     if(!regexEmail.test(email)){
         throw new Error(
-            "Formato de email inválido"
+            "Invalid email format."
         );
     }
     return true

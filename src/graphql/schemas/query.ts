@@ -4,6 +4,7 @@ export const queryTypeDefs = gql`
   type Query {
     hello: String!
     users: [User!]
+    findUser(id: ID!): User!
   }
 
   type User {
@@ -18,5 +19,16 @@ export const queryTypeDefs = gql`
     email: String!
     password: String!
     birthDate: String!
+  }
+
+  input UpdateUserInput {
+    name: String
+    email: String
+    password: String
+    birthDate: String
+  }
+
+  type DeleteUserResponse {
+    message: String!
   }
 `;
